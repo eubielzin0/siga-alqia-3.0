@@ -894,9 +894,27 @@ $("loginBtn").onclick=async()=>{
   if(!raw||!pass){ showErr("Preencha usuário e senha."); return; }
   const email = raw.includes("@") ? raw : raw+EMAIL_DOMAIN;
   b.classList.add("loading"); b.disabled=true; $("loginLbl").textContent="Entrando…"; hide("loginErr");
-  const {data,error}=await sb.auth.signInWithPassword({email,password:pass});
+  let data,error;
+  try {
+    ({data,error}=await sb.auth.signInWithPassword({email,password:pass}));
+  } catch(e) {
+    error=e;
+  }
   b.classList.remove("loading"); b.disabled=false; $("loginLbl").textContent="Entrar";
-  if(error){ showErr("Usuário ou senha incorretos."); return; }
+  if(error){
+    const status=Number(error.status||0);
+    const code=String(error.code||"").toLowerCase();
+    const message=String(error.message||"").toLowerCase();
+    if(code==="invalid_credentials"||status===400&&message.includes("invalid login")){
+      showErr("Usuário ou senha incorretos. Confira as credenciais.");return;
+    }
+    if(status===429){showErr("Muitas tentativas de acesso. Aguarde alguns minutos.");return;}
+    if(code==="email_not_confirmed"){showErr("E-mail ainda não confirmado. Procure a coordenação.");return;}
+    if(status>=500||!status||/fetch|network|timeout|unavailable|connection/.test(message)){
+      showErr("Serviço de autenticação indisponível. O Supabase pode estar inicializando; tente novamente mais tarde.");return;
+    }
+    showErr("Não foi possível autenticar (código "+(code||status||"conexão")+"). Contate a coordenação.");return;
+  }
   const prof=await loadProfile(data.user.id);
   if(!prof){ showErr("Perfil não encontrado. Avise a coordenação."); await sb.auth.signOut(); return; }
   current=prof; loadQueue();
