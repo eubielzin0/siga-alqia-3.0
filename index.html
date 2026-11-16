@@ -576,6 +576,18 @@ svg{display:block}
     <div class="calc" id="pfCasa"></div>
     <div class="pf-ok" id="pfOk">✓ Perfil salvo</div>
     <button class="pbtn" id="pfSave"><span class="spin"></span><span id="pfSaveLbl">Salvar perfil</span></button>
+    <div style="border-top:1px solid #dce6df;margin:22px 0 12px;padding-top:16px">
+      <div class="eyebrow">Segurança da conta</div>
+      <p style="font-size:12px;line-height:1.5;color:#62776b;margin:8px 0 12px">Altere sua senha inicial após o primeiro acesso. Nunca compartilhe sua senha pessoal.</p>
+      <div class="field-label">Senha atual</div>
+      <input class="in" id="pfPassAtual" type="password" autocomplete="current-password" placeholder="Senha utilizada para entrar">
+      <div class="field-label">Nova senha</div>
+      <input class="in" id="pfPassNova" type="password" minlength="16" autocomplete="new-password" placeholder="16 caracteres, com letras, números e símbolo">
+      <div class="field-label">Confirmar nova senha</div>
+      <input class="in" id="pfPassConf" type="password" minlength="16" autocomplete="new-password" placeholder="Repita a nova senha">
+      <div id="pfPassMsg" aria-live="polite" style="font-size:12px;line-height:1.5;margin:9px 0 2px;color:#526457"></div>
+      <button class="pbtn" type="button" id="pfChangePass">Alterar minha senha</button>
+    </div>
     <button class="linkbtn" id="pfBack">Voltar</button>
   </div>
 </div>
@@ -1689,7 +1701,7 @@ function renderAcessos(v){
       secret.style.cssText="display:block;font-size:15px;font-weight:800;letter-spacing:.025em;color:#23452f;background:white;padding:12px;border-radius:9px;overflow-wrap:anywhere";
       secret.textContent=senha;
       const caption=document.createElement("p");caption.style.cssText="font-size:12px;line-height:1.5;color:#526457";
-      caption.textContent="Copie a senha agora e compartilhe por canal privado. Oriente o colaborador a alterá-la no primeiro acesso; o login exige e-mail corporativo válido.";
+      caption.textContent="Copie a senha agora e compartilhe por canal privado. O colaborador pode alterar a senha inicial em Meu perfil → Segurança da conta. O login exige e-mail corporativo válido.";
       const copy=document.createElement("button");
       copy.type="button";copy.className="copy-btn";copy.textContent="Copiar login e senha";
       copy.onclick=async()=>{
@@ -2301,6 +2313,32 @@ $("pfSave").onclick=async()=>{
   $("pfNotice").style.display=current.papel==="auditor"&&(!current.telefone||!current.admissao)?"block":"none";
   $("pfOk").classList.add("show");
   setTimeout(()=>$("pfOk").classList.remove("show"),2200);
+};
+// Atualização da própria senha, confirmando a credencial anterior.
+$("pfChangePass").onclick=async()=>{
+  const button=$("pfChangePass");
+  const actual=$("pfPassAtual").value, next=$("pfPassNova").value, confirmPass=$("pfPassConf").value;
+  const msg=$("pfPassMsg");msg.textContent="";
+  if(!actual){msg.textContent="Informe sua senha atual.";return;}
+  if(next!==confirmPass){msg.textContent="A confirmação da nova senha não corresponde.";return;}
+  if(next===actual){msg.textContent="A nova senha precisa ser diferente da atual.";return;}
+  if(next.length<16||next.length>100||!/[A-Z]/.test(next)||!/[a-z]/.test(next)||!/\d/.test(next)||!/[^\w]/.test(next)){
+    msg.textContent="A nova senha precisa ter 16 a 100 caracteres, letras maiúsculas, minúsculas, números e símbolos.";return;
+  }
+  button.disabled=true;button.textContent="Alterando senha…";
+  try{
+    const {data:userResult,error:userError}=await sb.auth.getUser();
+    const email=userResult?.user?.email;
+    if(userError||!email)throw new Error("Sessão inválida. Entre novamente.");
+    const {error:verifyError}=await sb.auth.signInWithPassword({email,password:actual});
+    if(verifyError)throw new Error("A senha atual está incorreta.");
+    const {error:updateError}=await sb.auth.updateUser({password:next});
+    if(updateError)throw new Error("Não foi possível alterar a senha. Tente novamente.");
+    ["pfPassAtual","pfPassNova","pfPassConf"].forEach(id=>$(id).value="");
+    msg.style.color="#23623d";
+    msg.textContent="Senha alterada com sucesso.";
+  }catch(err){msg.style.color="#9b3f3f";msg.textContent=err?.message||"Falha ao alterar a senha.";}
+  finally{button.disabled=false;button.textContent="Alterar minha senha";}
 };
 /* foto de perfil */
 $("pfAvBtn").onclick=()=>{ $("avIn").value=""; $("avIn").click(); };
