@@ -2322,7 +2322,7 @@ $("pfChangePass").onclick=async()=>{
   if(!actual){msg.textContent="Informe sua senha atual.";return;}
   if(next!==confirmPass){msg.textContent="A confirmação da nova senha não corresponde.";return;}
   if(next===actual){msg.textContent="A nova senha precisa ser diferente da atual.";return;}
-  if(next.length<16||next.length>100||!/[A-Z]/.test(next)||!/[a-z]/.test(next)||!/\d/.test(next)||!/[^\w]/.test(next)){
+  if(next.length<16||next.length>100||!/[A-Z]/.test(next)||!/[a-z]/.test(next)||!/\d/.test(next)||!/[^A-Za-z0-9]/.test(next)){
     msg.textContent="A nova senha precisa ter 16 a 100 caracteres, letras maiúsculas, minúsculas, números e símbolos.";return;
   }
   button.disabled=true;button.textContent="Alterando senha…";
