@@ -623,7 +623,7 @@ svg{display:block}
   <div class="adm-hd">
     <div class="top">
       <div class="av" id="admAv">G</div>
-      <div class="ab"><div class="nm" id="admNm">Gabriel</div><div class="rl" id="admRl">Coordenação</div></div>
+      <div class="ab"><div class="nm" id="admNm">Gabriel</div><div class="rl" id="admRl">Supervisão</div></div>
       <div class="live" id="admLive"><span class="ld"></span>AO VIVO</div>
     </div>
     <div class="adm-date-row">
@@ -769,7 +769,7 @@ svg{display:block}
     <div class="imp-list" id="impList"></div>
     <div class="sheet-sec">Valores apurados — dia selecionado</div>
     <div class="financial-summary" id="financialSummary"><div class="financial-note">Carregando apurações do dia...</div></div>
-    <div class="fin-ok" id="finOk">✓ Turno finalizado e enviado ao coordenador.</div>
+    <div class="fin-ok" id="finOk">✓ Turno finalizado e enviado à supervisão.</div>
     <button class="fin-btn" id="finBtn">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
       <span id="finLbl">Finalizar e enviar turno</span>
@@ -1113,7 +1113,7 @@ function preparePick(tipo){
       $("newTerminalFields").style.display=select.value==="__nova__"?"block":"none";
       const t=items.find(x=>x.id===select.value);
       hint.textContent=t?((t.validado?"Validada. ":"Aguardando validação física. ")+(t.observacao||"")):
-        select.value==="__nova__"?"Este terminal ficará pendente de validação pelo coordenador.":
+        select.value==="__nova__"?"Este terminal ficará pendente de validação pela supervisão.":
         items.length+" POS no cadastro.";
     };
     draw();
@@ -1165,7 +1165,7 @@ $("camIn").onchange=async e=>{
       .eq("luc",info.luc).eq("chave",chave).maybeSingle();
     if(old.error)throw old.error;
     if(old.data && old.data.auditor_id!==current.id){
-      throw new Error("Esse fechamento já foi registrado por outro auditor. Peça ao coordenador para revisar.");
+      throw new Error("Esse fechamento já foi registrado por outro auditor. Peça à supervisão para revisar.");
     }
     const blob=await compress(f);
     const [y,m,d]=sel.date.split("-");
@@ -1577,13 +1577,13 @@ function renderAcessos(v){
   v.replaceChildren();
   if(current.papel!=="coordenador"){
     const no=document.createElement("div");no.className="catalog-empty";
-    no.textContent="Somente o coordenador pode cadastrar novos usuários.";v.appendChild(no);return;
+    no.textContent="Somente a supervisão pode cadastrar novos usuários.";v.appendChild(no);return;
   }
   const shell=document.createElement("section");shell.className="catalog-shell";
   const h=document.createElement("h2");h.style.cssText="margin:0 0 8px;font-size:20px;color:var(--g-dark)";
   h.textContent="Gerenciar acessos de auditoria";shell.appendChild(h);
   const intro=document.createElement("p");intro.style.cssText="font-size:13px;color:#65766a;line-height:1.6;margin:0 0 17px";
-  intro.textContent="Cadastre auditores com permissões limitadas à coleta. O sistema gera uma senha individual forte, exibida uma única vez ao coordenador. A criação é feita pela API oficial de autenticação do Supabase.";
+  intro.textContent="Cadastre auditores com permissões limitadas à coleta. O sistema gera uma senha individual forte, exibida uma única vez ao supervisor. A criação é feita pela API oficial de autenticação do Supabase.";
   shell.appendChild(intro);
   const form=document.createElement("form");form.style.cssText="display:grid;gap:13px;max-width:570px";
   const addField=(labelText,value,type="text")=>{
