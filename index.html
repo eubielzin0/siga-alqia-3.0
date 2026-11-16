@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SIGA · ALQIA 2.0 — Painel de Coleta | Bossa Nova Mall</title>
+<title>SIGA · ALQIA 3.0 — Painel de Coleta | Bossa Nova Mall</title>
 <link rel="manifest" href="./manifest.webmanifest">
 <meta name="theme-color" content="#0F2419">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="SIGA · ALQIA 2.0">
+<meta name="apple-mobile-web-app-title" content="SIGA · ALQIA 3.0">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <link rel="icon" type="image/png" href="./favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -412,7 +412,7 @@ header.show{display:block}
   padding:13px 16px;font-size:13px;font-weight:700;display:none;align-items:center;gap:10px}
 .up-bar.show{display:flex}
 .up-bar .spin{width:15px;height:15px;border-width:2px}
-/* ---------- SPLASH (marca SIGA · ALQIA 2.0 — animação de 5 tempos) ---------- */
+/* ---------- SPLASH (marca SIGA · ALQIA 3.0 — animação de 5 tempos) ---------- */
 #splash{position:fixed;inset:0;background:var(--siga-bg);z-index:70;display:flex;
   flex-direction:column;align-items:center;justify-content:center}
 #splash.out{animation:fadeOut .5s ease forwards}
@@ -498,7 +498,7 @@ svg{display:block}
 </head>
 <body>
 
-<div id="boot"><div class="spin"></div><div class="bt">Carregando SIGA · ALQIA 2.0…</div></div>
+<div id="boot"><div class="spin"></div><div class="bt">Carregando SIGA · ALQIA 3.0…</div></div>
 
 <!-- SPLASH -->
 <div id="splash" style="display:none">
@@ -507,7 +507,7 @@ svg{display:block}
     <div class="sp-div"></div>
     <div class="sp-words">
       <img class="sp-siga" src="./mark-siga.png" alt="siga">
-      <span class="sp-vpq" style="font-size:15px;font-weight:800;color:#fff;letter-spacing:.08em">ALQIA 2.0</span>
+      <span class="sp-vpq" style="font-size:15px;font-weight:800;color:#fff;letter-spacing:.08em">ALQIA 3.0</span>
     </div>
   </div>
   <div class="sp-tag">Sistema Integrado de Gestão da <b>Auditoria</b></div>
@@ -525,7 +525,7 @@ svg{display:block}
   <div class="box">
     <div class="wl-mark">
       <img src="./mark-mono.png" alt="SIGA">
-      <div><div class="wt">SIGA · ALQIA 2.0</div><div class="ws">SISTEMA INTEGRADO DE GESTÃO DA AUDITORIA</div></div>
+      <div><div class="wt">SIGA · ALQIA 3.0</div><div class="ws">SISTEMA INTEGRADO DE GESTÃO DA AUDITORIA</div></div>
     </div>
     <h1>Bem-vindo</h1>
     <div class="wl-p">O sistema de coleta de vendas da Auditoria. Rota, marcação e evidência
@@ -585,7 +585,7 @@ svg{display:block}
 <div class="screen" id="login">
   <div class="box">
     <img src="./mark-mono.png" alt="SIGA" style="height:56px;margin-bottom:14px">
-    <h1>SIGA · ALQIA 2.0</h1>
+    <h1>SIGA · ALQIA 3.0</h1>
     <div class="sub">Painel de Coleta — acesso da equipe</div>
     <div class="gold-line"></div>
     <div class="field-label">Usuário</div>
@@ -788,11 +788,11 @@ svg{display:block}
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 /* ================= CONEXÃO ================= */
-const SUPABASE_URL = "https://nvtmwabvrukyidusmfdg.supabase.co";
-const SUPABASE_KEY = "sb_publishable_d9EnRDnlPTjRhJlb4dI5Nw_iDnbJky6";
+const SUPABASE_URL = "https://nxjketxgagqmqpszogff.supabase.co";
+const SUPABASE_KEY = "sb_publishable_JyNEoqT-8wuKHpxX3S3-jw_-PeMwdxO";
 const EMAIL_DOMAIN  = "@bossanovamall.com";
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY, {
-  auth:{ persistSession:true, autoRefreshToken:true, storage: window.localStorage }
+  auth:{ persistSession:true, autoRefreshToken:true, storage: window.localStorage, storageKey: 'siga-alqia-3-auth' }
 });
 
 /* ================= DADOS ================= */
@@ -1935,7 +1935,7 @@ function counts(){ let c=0,i=0,t=0;
 function updateStats(){ const k=counts(); $("sCol").textContent=k.c; $("sImp").textContent=k.i; $("sPen").textContent=k.p; }
 function updateHeader(){
   const k=counts(); updateStats();
-  $("hdRoute").innerHTML=`Rota ${sel.route} <span class="badge">SIGA · ALQIA 2.0</span>`;
+  $("hdRoute").innerHTML=`Rota ${sel.route} <span class="badge">SIGA · ALQIA 3.0</span>`;
   const dt=new Date(sel.date+"T00:00").toLocaleDateString("pt-BR",{day:"2-digit",month:"short"});
   $("hdLine2").innerHTML=`<span>${current.nome}</span><span class="dot-sep"></span><span>${dt}</span><span class="dot-sep"></span><span class="hd-clock" id="clk">${nowHM()}</span>`;
   drawRing(k.t?(k.c+k.i)/k.t:0); drawPulse(k);
@@ -2081,7 +2081,7 @@ function buildSheet(){
 function buildReport(){
   const k=counts();
   const dt=new Date(sel.date+"T00:00").toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"});
-  let txt=`SIGA · ALQIA 2.0 — COLETA · Rota ${sel.route}\n${current.nome} (${current.funcao}) • ${dt}\n`;
+  let txt=`SIGA · ALQIA 3.0 — COLETA · Rota ${sel.route}\n${current.nome} (${current.funcao}) • ${dt}\n`;
   txt+=`Coletadas: ${k.c}/${k.t} · Impedimentos: ${k.i} · Pendentes: ${k.p}\n`;
   const imp=[],pen=[];
   ROUTES[sel.route].forEach(b=>b.s.forEach(s=>{ const mk=state.marks[slug(s)];
