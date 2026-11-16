@@ -1,8 +1,8 @@
-/* SIGA ALQIA 2.0 — service worker de desenvolvimento
+/* SIGA ALQIA 3.0 — service worker de desenvolvimento
    Estratégia: rede primeiro, cache como reserva offline.
    Assim toda atualização do app chega aos auditores sem travar em versão antiga.
    Os dados de coleta ficam no localStorage/Supabase — NUNCA neste cache. */
-const CACHE = "siga-alqia-bnm-v1";
+const CACHE = "siga-alqia-bnm-v3";
 const ASSETS = ["./","./index.html","./manifest.webmanifest",
   "./icon-192.png","./icon-512.png","./apple-touch-icon.png","./favicon.png",
   "./mark-mono.png","./mark-siga.png",
